@@ -1,0 +1,39 @@
+## Visual Studio Tooling
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build Outputs
+[Dd]ebug/
+[Release]/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## ASP.NET Core & Web Tooling
+wwwroot/lib/
+_publish/
+*.prod.xml
+*.userprefs
+
+## Secrets and Local Configurations
+appsettings.Development.json
+*.secrets.json
+.env
+
+## Rider / JetBrains IDEs
+.idea/
+*.sln.DotSettings.user
+
+## Visual Studio Code
+.vscode/
+!.vscode/extensions.json
+
+## Packages
+*.nuget.props
+*.nuget.targets
+pkg/
