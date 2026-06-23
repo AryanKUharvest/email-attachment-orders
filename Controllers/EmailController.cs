@@ -8,10 +8,12 @@ namespace email_attachment_orders.Controllers
     public class EmailController : ControllerBase
     {
         private readonly EmailService _emailService;
+        private readonly OutletMappingService _outletMapService;
 
-        public EmailController(EmailService emailService)
+        public EmailController(EmailService emailService, OutletMappingService outletMapService)
         {
             _emailService = emailService;
+            _outletMapService = outletMapService;
         }
 
         [HttpGet("orders")]
@@ -20,7 +22,9 @@ namespace email_attachment_orders.Controllers
             try
             {
                 var orders = await _emailService.GetParsedEmailOrdersForTestingAsync();
-                return Ok(orders);
+                var email = "vikas@gmail.com";
+                var response = await _outletMapService.GetMappingByEmailAsync(email);
+                return Ok(response);
             }
             catch (Exception ex)
             {

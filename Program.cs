@@ -1,5 +1,7 @@
 using email_attachment_orders.Services;
+using email_attachment_orders.Data;
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
 
 var envPath = Path.Combine(
@@ -12,9 +14,24 @@ Env.Load(envPath);
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages();
-builder.Services.AddControllers();
+// Database
+var connectionString =
+    Environment.GetEnvironmentVariable("CONNECTION_STRING")
+    ?? throw new Exception("CONNECTION_STRING not found");
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    );
+});
+
+// MVC
+builder.Services.AddControllers();
+builder.Services.AddRazorPages();
+
+// Graph API
 builder.Services.AddSingleton<GraphAuthService>();
 
 builder.Services.AddSingleton<GraphServiceClient>(sp =>
@@ -23,8 +40,10 @@ builder.Services.AddSingleton<GraphServiceClient>(sp =>
     return authService.getClient();
 });
 
+// Application Services
 builder.Services.AddScoped<ExcelParseService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<OutletMappingService>();
 
 var app = builder.Build();
 
